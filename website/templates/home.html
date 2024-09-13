@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Industry Cross Reference</h1>
+    <form method="POST" action="{{ url_for('views.home') }}">
+        <div class="form-row justify-content-center">
+            <div class="form-group col-md-4">
+                <label for="part_number" style="font-size: 24px;">Part Number:</label>
+                <input type="text" name="part_number" id="part_number" class="form-control" placeholder="Enter part number" required>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+    <br />
+</div>
+{% endblock %}
