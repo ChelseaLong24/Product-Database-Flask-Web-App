@@ -2,12 +2,46 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="text-center">Industry Cross Reference</h1>
+    <h1 class="text-center">Part Number Search</h1>
     <form method="POST" action="{{ url_for('views.home') }}">
         <div class="form-row justify-content-center">
+            <div class="form-group col-md-6">
+                <label for="part_number" class="part-number-label">Part Number:</label>
+                <select name="part_number" id="part_number" class="form-control">
+                    <option value="" {% if not part_number %}selected{% endif %}>Select or enter a part number</option>
+                    {% for pn in part_numbers_list %}
+                        <option value="{{ pn }}" {% if part_number == pn %}selected{% endif %}>{{ pn }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
             <div class="form-group col-md-4">
-                <label for="part_number" style="font-size: 24px;">Part Number:</label>
-                <input type="text" name="part_number" id="part_number" class="form-control" placeholder="Enter part number" required>
+                <label for="drawn_or_welded">Drawn or Welded:</label>
+                <select name="drawn_or_welded" id="drawn_or_welded" class="form-control">
+                    <option value="" {% if not drawn_or_welded %}selected{% endif %}>Optional</option>
+                    {% for item in drawn_or_welded_list %}
+                        <option value="{{ item }}" {% if drawn_or_welded == item %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="bracket">Bracket:</label>
+                <select name="bracket" id="bracket" class="form-control">
+                    <option value="" {% if not bracket %}selected{% endif %}>Optional</option>
+                    {% for item in bracket_list %}
+                        <option value="{{ item }}" {% if bracket == item %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="pigtail">Pigtail:</label>
+                <select name="pigtail" id="pigtail" class="form-control">
+                    <option value="" {% if not pigtail %}selected{% endif %}>Optional</option>
+                    {% for item in pigtail_list %}
+                        <option value="{{ item }}" {% if pigtail == item %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
         <div class="text-center">
@@ -15,5 +49,31 @@
         </div>
     </form>
     <br />
+    {% if results is not none and not results.empty %}
+    <h2 class="text-center">Search Results</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    {% for col in results.columns %}
+                    <th class="text-center align-middle">{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in results.iterrows() %}
+                <tr>
+                    {% for col in results.columns %}
+                    <td class="text-center align-middle">{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif searched %}
+    <p class="text-center">No results found for your search criteria.</p>
+    {% endif %}
 </div>
 {% endblock %}
+
